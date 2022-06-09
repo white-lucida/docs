@@ -1,0 +1,84 @@
+# キュー
+
+この項目では、読み上げ音声を再生するためのキューの実装を取り扱います。
+
+# インターフェース
+
+```ts
+interface SpakerQueue {
+  private get running(): boolean;
+  private resources: Promise<void>[];
+  private player: AudioPlayer;
+  public add(resource: AudioResource): void;
+  private async run(): void;
+}
+
+// TODO: 文法おかしいから正す
+```
+
+## 初期化
+
+```ts
+const queue = new SpeakerQueue(player);
+```
+
+## 音声の追加
+
+`add()`メソッドを使用します。
+
+```ts
+queue.add(resource);
+```
+
+### 入出力
+
+- `resource`は`AudioResource`クラスのオブジェクトです。
+- `add()`は何も返却しません。
+
+#### テスト
+
+- 型情報のみで制約できるため、必要ありません。
+
+### 挙動
+- キューが他の`AudioResource`を再生中なら、すぐには再生されません。
+- キューが何も再生していないなら、内部で`run()`メソッドが呼び出されます。
+
+#### テスト
+- （現在再生中かどうかは、`running`プロパティで判断します。）
+##### 再生中なら、すぐに再生されない
+- `running`が`true`のとき、`run()`メソッドが**呼び出されない**ことを確認します。
+- また、`resources`に要素が追加されることを、要素数が1つ増加したことを以て確認します。
+##### 再生中でないなら、`run()`メソッドが呼び出される
+- `running`が`false`のとき、`run()`メソッドが呼び出されることを確認します。
+- また、`resources`に要素が追加されることを、要素数が1つ増加したことを以て確認します。
+
+## 音声再生中かどうか
+
+- `running` プロパティから取得できます。
+- `running`は、`resources`の要素数が0であることを示します。
+
+### テスト
+- `resources`を要素が1個の配列にし、`running`が`true`であることを確認します。
+- `resources`を要素が0個の配列にし、`running`が`false`であることを確認します。
+
+## キューの音声を再生する
+
+- `run()`メソッドを実行します。
+- `run()`メソッドは、`resources`プロパティに対して非同期イテレーションを行って、`resources`配列の要素のPromiseを順番に`await`します。
+  - `await`したら、要素を配列から削除します。
+
+### テスト
+- `resources`配列にすぐに`resolve()`するPromiseを追加して、`run()`メソッドを実行し、`resources`配列が空になることを確認します。
+
+## 音声の再生処理
+
+- 上の見出しで、`run()`メソッドはPromiseを処理していました。
+- このPromiseは`add()`メソッドで追加されるものです。
+
+- このPromiseは、`player`に対して、`AudioPlayer.play()`を実行して、`AudioResource.playStream`の`end`イベントを受け取ると`resolve()`します。
+
+### テスト
+- 単体テストの必要はありません。
+
+
+
