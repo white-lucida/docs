@@ -1,0 +1,87 @@
+# ロール追加処理
+
+この項目では、ボタンのインタラクションを受け取ったあとのロール付与処理や、メッセージ内容の仕様を記述します。
+
+## 挙動
+### インタラクションを受け取る
+インタラクションを受け取ったら、[カスタムID](./custom-id)より`CustomId`インスタンスを生成します。
+
+`RangeError`が発生した場合は、[カスタムIDが誤っている場合](#invalid-custom-id)を参照してください。
+
+### ロールの付与リクエスト
+- `CustomId.roleId`からロールIDを取得します。
+- ロールを付与するリクエストを発行します。
+  - [Add Guild Member Role](https://discord.com/developers/docs/resources/guild#add-guild-member-role)
+
+```ts
+getRequest: (guildId: string, userId: string, roleId: string) => Request
+```
+
+#### テスト
+
+- `getRequest`の戻り値についてテストします。
+  - [Request](https://developer.mozilla.org/ja/docs/Web/API/Request)
+
+##### 条件 
+- `method`が`PUT`である。
+- `url`が以下の形式を満たす。
+```
+https://discord.com/api/v{version_number}/guilds/{guildId}/members/{memberId}/roles/{roleId}
+```
+
+##### テストケース
+12桁のランダムに生成した整数をそれぞれの引数に使ってテストしてください。
+
+##### 注
+- `url`の`version_number`部は任意の整数です。
+
+### リクエスト送信
+
+- リクエストを送信して、レスポンスのステータスが204であることを確認します。
+  - 204なら、[ロールの付与を完了した場合](#add-role-suceeded)のメッセージを返信します。
+  - 204でないなら
+    - 403（Forbidden）なら、[ロール付与の権限がなかった場合](#add-role-forbidden)のメッセージを返信します。
+    - それ以外なら、[カスタムIDが誤っている場合](#invalid-custom-id)のメッセージを返信します。
+
+```ts
+getInteractionResponse: (response: Response) => APIInteractionResponseChannelMessageWithSource
+```   
+
+[APIInteractionResponseChannelMessageWithSource](https://discord-api-types.dev/api/discord-api-types-v9/interface/APIInteractionResponseChannelMessageWithSource)
+
+#### テスト
+
+- `Response`オブジェクトを与えて、`getInteractionResponse`の戻り値をテストします。
+
+- `204`の場合
+- `403`の場合
+- `404`の場合
+- `400`の場合
+
+## メッセージ
+### ロールの付与を完了した場合 {#add-role-succeeded}
+以下を`content`にセットしたメッセージを、`ephemeral: true`で返信します。
+
+```
+ロールを追加しました。
+```
+
+### ロール付与の権限がなかった場合 {#add-role-forbidden}
+以下を`content`にセットしたエラーメッセージを返信します。
+
+```
+ロールを付与する権限がありませんでした。
+（@管理者へのメンション）
+```
+
+### インタラクションのカスタムIDが誤っている場合 {#invalid-custom-id}
+
+- カスタムIDの形式が正しくない場合
+- 取得したロールIDが正しくない場合
+
+以下を`content`にセットしたエラーメッセージを返信します。
+
+```
+このボタンは、ロールが正しく設定されていません。
+（@管理者へのメンション）
+```
