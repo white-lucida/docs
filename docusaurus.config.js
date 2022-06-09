@@ -78,7 +78,7 @@ const config = {
             items: [
               {
                 label: '開発者向け',
-                to: '/developer/index',
+                to: '/developer',
               },
             ],
           },
