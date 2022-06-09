@@ -1,0 +1,79 @@
+# カスタムID
+
+この項目では、ボタンのカスタムIDが満たす条件と、カスタムID用のユーティリティクラスについて記述します。
+
+## インターフェース
+
+```ts
+class CustomID {
+  public readonly value: string;
+  constructor(id: string): CustomID
+  public get roleId(): string;
+
+  static checkCustomId(id: string): boolean
+}
+```
+
+## 挙動
+
+- ボタンのカスタムIDからロールのIDを読み取って付与します。
+
+### 対象となるボタン
+
+カスタムIDは、`role-{ロールID}`の形式に従っている必要があります。
+
+例：
+
+- ⭕`role-1234567890123456` 
+  - 正しい形式です。
+- ❌`1234589090901`
+  - `role-` プレフィックスがありません。
+- ❌`1235938501901-role`
+  - 形式が正しくありません。
+
+```ts
+checkCustomId(customId: string) => boolean
+```
+
+#### テスト {#custom-id-format-test}
+`CustomID.checkCustomId`に対して、以下を確認します。
+
+- 空文字列を与えて、`false`が返される。
+- `role-`を与えて、`false`が返される。
+- `12345678901234567890`を与えて、`false`が返される。
+- `role-ABCDE`を与えて、`false`が返される。
+- `role-漢字`を与えて、`false`が返される。
+- `role-1234567890ABCDE`を与えて、`false`が返される。
+- `role-12345678901234567890`を与えて、`true`が返される。
+
+### 初期化
+
+- 正しい形式のカスタムIDが与えられた場合、`CustomId`インスタンスを返します。
+- 誤った形式のカスタムIDが与えられた場合、`RangeError`を出します。
+  
+
+#### テスト
+
+- [カスタムIDの形式のテスト](#custom-id-format-test)と同様のテストケースを作成します。
+  - 正しい形式のとき、`CustomId`インスタンスが返される。
+  - 誤った形式のとき、`RangeError`が発生する。
+
+
+### ロールIDの取得
+
+- `role-{ロールID}`のうち、`role-`以下の部分を抜き出します。
+
+```ts
+get roleId: () => string
+```
+
+#### テスト
+`CustomID`インスタンスに対してテストします。
+
+- `role-1`を渡してインスタンス化
+  - `roleId`プロパティが`1`である
+- `role-1234567890`を渡してインスタンス化
+  - `roleId`プロパティが`1234567890`である
+
+
+
