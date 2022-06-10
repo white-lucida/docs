@@ -1,3 +1,5 @@
+import { Messages, Bot, Interaction, Mention, Markdown } from "@site/src/components/Discord";
+
 # ロール追加処理
 
 この項目では、ボタンのインタラクションを受け取ったあとのロール付与処理や、メッセージ内容の仕様を記述します。
@@ -38,7 +40,7 @@ https://discord.com/api/v{version_number}/guilds/{guildId}/members/{memberId}/ro
 ### リクエスト送信
 
 - リクエストを送信して、レスポンスのステータスが204であることを確認します。
-  - 204なら、[ロールの付与を完了した場合](#add-role-suceeded)のメッセージを返信します。
+ - 204なら、[ロールの付与を完了した場合](#add-role-suceeded)のメッセージを返信します。
   - 204でないなら
     - 403（Forbidden）なら、[ロール付与の権限がなかった場合](#add-role-forbidden)のメッセージを返信します。
     - それ以外なら、[カスタムIDが誤っている場合](#invalid-custom-id)のメッセージを返信します。
@@ -60,19 +62,32 @@ getInteractionResponse: (response: Response) => APIInteractionResponseChannelMes
 
 ## メッセージ
 ### ロールの付与を完了した場合 {#add-role-succeeded}
-以下を`content`にセットしたメッセージを、`ephemeral: true`で返信します。
+以下のメッセージを、`ephemeral: true`で返信します。
 
-```
-ロールを追加しました。
-```
+<Messages>
+  <Bot>
+    <div slot="interactions">
+      <Interaction ephemeral={true} /> 
+    </div>
+    ロールを追加しました。
+  </Bot>
+</Messages>
 
 ### ロール付与の権限がなかった場合 {#add-role-forbidden}
-以下を`content`にセットしたエラーメッセージを返信します。
+以下のエラーメッセージを返信します。
 
-```
-ロールを付与する権限がありませんでした。
-（@管理者へのメンション）
-```
+<Messages>
+  <Bot>
+    <div slot="interactions">
+      <Interaction />
+    </div>
+    <Markdown>
+      <Mention type="role" roleColor="red">エラー</Mention>
+      <br />
+      ロールを付与する権限がありませんでした。
+    </Markdown>
+  </Bot>
+</Messages>
 
 ### インタラクションのカスタムIDが誤っている場合 {#invalid-custom-id}
 
@@ -81,7 +96,8 @@ getInteractionResponse: (response: Response) => APIInteractionResponseChannelMes
 
 以下を`content`にセットしたエラーメッセージを返信します。
 
-```
-このボタンは、ロールが正しく設定されていません。
-（@管理者へのメンション）
-```
+<Messages>
+  <Bot>
+    このボタンは、ロールが正しく設定されていません。
+  </Bot>
+</Messages>
