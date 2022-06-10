@@ -30,6 +30,12 @@ const sidebars = {
       label: "ロール付与ボタン",
       items: ["developer/role-button/main", "developer/role-button/custom-id"],
       link: {type:"doc", id: "developer/role-button/about"}
+    },
+    {
+      type: "category",
+      label: "メッセージエディタ",
+      items: ["developer/message-editor/discord", "developer/message-editor/editor","developer/message-editor/envs"],
+      link: {type: "doc", id: "developer/message-editor/about"}
     }
   ],
   
