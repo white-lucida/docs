@@ -1,3 +1,5 @@
+import { Messages, Bot } from "@site/src/components/Discord";
+
 # ロール追加処理
 
 この項目では、ボタンのインタラクションを受け取ったあとのロール付与処理や、メッセージ内容の仕様を記述します。
@@ -60,19 +62,22 @@ getInteractionResponse: (response: Response) => APIInteractionResponseChannelMes
 
 ## メッセージ
 ### ロールの付与を完了した場合 {#add-role-succeeded}
-以下を`content`にセットしたメッセージを、`ephemeral: true`で返信します。
+以下のメッセージを、`ephemeral: true`で返信します。
 
-```
-ロールを追加しました。
-```
+<Messages>
+  <Bot>
+    ロールを追加しました。
+  </Bot>
+</Messages>
 
 ### ロール付与の権限がなかった場合 {#add-role-forbidden}
 以下を`content`にセットしたエラーメッセージを返信します。
 
-```
-ロールを付与する権限がありませんでした。
-（@管理者へのメンション）
-```
+<Messages>
+  <Bot>
+    ロールを付与する権限がありませんでした。
+  </Bot>
+</Messages>
 
 ### インタラクションのカスタムIDが誤っている場合 {#invalid-custom-id}
 
@@ -81,7 +86,8 @@ getInteractionResponse: (response: Response) => APIInteractionResponseChannelMes
 
 以下を`content`にセットしたエラーメッセージを返信します。
 
-```
-このボタンは、ロールが正しく設定されていません。
-（@管理者へのメンション）
-```
+<Messages>
+  <Bot>
+    このボタンは、ロールが正しく設定されていません。
+  </Bot>
+</Messages>
