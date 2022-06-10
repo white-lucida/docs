@@ -1,0 +1,22 @@
+import {Messages, Bot, Interaction, Markdown} from "@site/src/components/Discord"
+
+# Discord
+
+## 編集用URLを取得する
+
+ボットのメッセージに`edit`メッセージコマンドを実行します。
+
+<Messages>
+  <Bot>
+    <div slot="interactions">
+      <Interaction command={true} highlight={true} ephemeral={true}>
+        edit
+      </Interaction>
+    </div>
+    <Markdown>
+      https://...
+    </Markdown>
+  </Bot>
+</Messages>
+
+ボットは、編集用URLを`ephemeral`なレスポンスとして返信します。

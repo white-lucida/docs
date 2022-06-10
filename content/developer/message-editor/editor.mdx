@@ -1,0 +1,52 @@
+import { Embeds, Messages, Bot, Embed, Buttons, Button } from "@site/src/components/Discord";
+
+# メッセージ編集画面
+
+## 埋め込み編集時
+
+
+## メッセージ送信
+
+### 新規メッセージの場合
+
+送信ボタンを押すと、該当するチャンネルにメッセージが送信されます。
+
+#### インターフェース
+
+```ts
+getSendRequest(channelId: string, message: APIMessage): Request 
+```
+
+- [APIMessage](https://discord-api-types.dev/api/discord-api-types-v10/interface/APIMessage)
+
+#### テスト
+
+- `Request.url`を検証します。
+  - 以下の形式を満たしているかテストします。
+  - `https://discord.com/api/v{version_number}/channels/{channelId}/messages`
+    - https://discord.com/developers/docs/resources/channel#create-message
+- `Request.method`を検証します。
+  - POSTであるかをテストします。
+- `await Request.json()`を検証します。
+  - 渡した`message`と同一であるかテストします。
+
+### 既存メッセージの場合
+
+更新ボタンを押すと、該当するメッセージが編集されます。
+
+#### インターフェース
+
+```ts
+getEditRequest(channelId: string, messageId: string, message: APIMessage): Request
+```
+
+#### テスト
+
+- `Request.url`を検証します。
+  - 以下の形式を満たしているかテストします。
+  - `https://discord.com/api/v{version_number}/channels/{channelId}/messages/{messageId}`
+    - https://discord.com/developers/docs/resources/channel#edit-message
+- `Request.method`を検証します。
+  - PATCHであるかを確認します。
+- `await Request.json()`を検証します。
+  - 渡した`message`と同一であるかをテストします。
