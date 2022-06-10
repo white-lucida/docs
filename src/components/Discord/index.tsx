@@ -9,6 +9,7 @@ import {
   DiscordEmbed,
   DiscordEmbedField,
   DiscordEmbedFields,
+  DiscordMarkdown,
 } from '@discord-message-components/react'
 
 import '@discord-message-components/react/dist/style.css'
@@ -35,13 +36,13 @@ export const User = ({ children }) => {
 
 export { DiscordEmbed as Embed, DiscordEmbedFields as Fields } 
 
-export const Footer = ({ children }) => <span slot="footer">{ children }</span>
 
-export const Buttons = ({ children }) => <DiscordButtons slot="actions">{ children }</DiscordButtons>;
 
-export{ DiscordButton as Button, DiscordMention as Mention, DiscordInteraction as Interaction }
+export{ DiscordButtons as Buttons, DiscordButton as Button, DiscordMention as Mention, DiscordInteraction as Interaction, DiscordMarkdown as Markdown }
 
-export const Interactions = ({ children }) => <div slot="interactions">{ children }</div>
+
+
+
 
 // export const Fields = ({ children }) => <DiscordEmbedFields slot="fields">{ children }</DiscordEmbedFields>;
 
