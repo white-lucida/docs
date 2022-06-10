@@ -1,4 +1,4 @@
-import { Messages, Bot } from "@site/src/components/Discord";
+import { Messages, Bot, Interaction, Mention, Markdown } from "@site/src/components/Discord";
 
 # ロール追加処理
 
@@ -40,7 +40,7 @@ https://discord.com/api/v{version_number}/guilds/{guildId}/members/{memberId}/ro
 ### リクエスト送信
 
 - リクエストを送信して、レスポンスのステータスが204であることを確認します。
-  - 204なら、[ロールの付与を完了した場合](#add-role-suceeded)のメッセージを返信します。
+ - 204なら、[ロールの付与を完了した場合](#add-role-suceeded)のメッセージを返信します。
   - 204でないなら
     - 403（Forbidden）なら、[ロール付与の権限がなかった場合](#add-role-forbidden)のメッセージを返信します。
     - それ以外なら、[カスタムIDが誤っている場合](#invalid-custom-id)のメッセージを返信します。
@@ -66,16 +66,26 @@ getInteractionResponse: (response: Response) => APIInteractionResponseChannelMes
 
 <Messages>
   <Bot>
+    <div slot="interactions">
+      <Interaction ephemeral={true} /> 
+    </div>
     ロールを追加しました。
   </Bot>
 </Messages>
 
 ### ロール付与の権限がなかった場合 {#add-role-forbidden}
-以下を`content`にセットしたエラーメッセージを返信します。
+以下のエラーメッセージを返信します。
 
 <Messages>
   <Bot>
-    ロールを付与する権限がありませんでした。
+    <div slot="interactions">
+      <Interaction />
+    </div>
+    <Markdown>
+      <Mention type="role" roleColor="red">エラー</Mention>
+      <br />
+      ロールを付与する権限がありませんでした。
+    </Markdown>
   </Bot>
 </Messages>
 

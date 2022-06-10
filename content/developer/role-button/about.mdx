@@ -1,4 +1,4 @@
-import { Messages, Bot, Buttons, Button } from "@site/src/components/Discord"
+import { Messages, Bot, Button, Buttons } from "@site/src/components/Discord"
 
 # ロール追加ボタン
 
@@ -7,7 +7,7 @@ import { Messages, Bot, Buttons, Button } from "@site/src/components/Discord"
 <Messages>
   <Bot>
     ロール追加メッセージ
-    <Buttons>
+    <Buttons slot="actions">
       <Button>ロールを追加</Button>
     </Buttons>
   </Bot>
