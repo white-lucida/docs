@@ -36,6 +36,12 @@ const sidebars = {
       label: "メッセージエディタ",
       items: ["developer/message-editor/discord", "developer/message-editor/editor","developer/message-editor/envs"],
       link: {type: "doc", id: "developer/message-editor/about"}
+    },
+    {
+      type: "category",
+      label: "メンバー・スレッド検索",
+      items: ["developer/search/firestore"],
+      link: {type:"doc", id: "developer/search/about"}
     }
   ],
   
